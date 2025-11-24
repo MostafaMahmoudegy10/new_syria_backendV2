@@ -26,6 +26,7 @@ public class SecurityConfig {
 
     private final PublicEndpointRegistry endpointRegistry;
 
+
 	public SecurityConfig(@Lazy TokenFilter filter,PublicEndpointRegistry endpointRegistry)
     {
 		this.filter = filter;
@@ -35,11 +36,12 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		return http.csrf(csrf -> csrf.disable()).cors(c -> corsConfigurationSource())
-				.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
+		return http.csrf(csrf -> csrf.disable())
                 .cors(c -> corsConfigurationSource())
+				.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/error").permitAll()
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/error",
+                                "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .requestMatchers(endpointRegistry.getPublicPatterns()).permitAll()
                         .anyRequest().authenticated()
                 )

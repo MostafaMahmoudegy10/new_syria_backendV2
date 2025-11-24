@@ -60,4 +60,6 @@ public class Article {
 	@ManyToOne()
 	@JoinColumn(name="category_id",nullable = false)
 	Category category;
+
+    private UUID userId;
 }

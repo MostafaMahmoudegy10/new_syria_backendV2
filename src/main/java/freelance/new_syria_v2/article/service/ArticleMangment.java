@@ -2,8 +2,11 @@ package freelance.new_syria_v2.article.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.UUID;
 
+import freelance.new_syria_v2.article.dto.LatestNewsDto;
+import freelance.new_syria_v2.auth.entity.ArticleUserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -92,4 +95,33 @@ public class ArticleMangment {
 
 		return articleRepository.findAll(spec, pageable);
 	}
+
+    public Page<ArticleUserDto> findUserArticles(UUID userId, int page, int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Article> articles = this.articleRepository.findByUser_Id(userId, pageable);
+
+        Page<ArticleUserDto> dtoPage = articles.map(article -> {
+            ArticleUserDto dto = new ArticleUserDto();
+            dto.setImageUrl(article.getImageUrl());
+            dto.setBio(article.getBio());
+            dto.setCreatedAt(article.getCreatedAt());
+            dto.setHeader(article.getHeader());
+            dto.setArticleId(article.getId());
+            return dto;
+        });
+
+        return dtoPage;
+    }
+
+    public Map<String, Long> getUserArticleStatus() {
+        return articleRepository.countStatusByUser();
+    }
+    public Page<LatestNewsDto> getLatestNews(int page, int size) {
+        //make the paggenation object
+        Pageable pageable = PageRequest.of(page,size);
+
+        return  this.articleRepository.getArticleWithCommentCountLatestNews(pageable);
+    }
 }

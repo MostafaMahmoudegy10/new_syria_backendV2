@@ -1,8 +1,9 @@
 package freelance.new_syria_v2.article.repository;
 
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import freelance.new_syria_v2.article.dto.LatestNewsDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +20,28 @@ public interface ArticleRepository extends JpaRepository<Article, UUID>, JpaSpec
 	Page<Article> findByStatus(Status status, Pageable pageable);
 
 	Page<Article> findByCategory_NameAndStatus(String name, Status status, Pageable pageable);
+
+    @Query("select a from Article a where a.userId=:userId")
+    Page<Article> findByUser_Id(UUID userId, Pageable pageable);
+
+    @Query(value = """
+        select 
+                Sum(case when status= 'APPROVED' then 1 else 0 end) as accepted,
+                SUM(case when status= 'REJECTED' then 1 else 0 end) as rejected,
+                SUM(case when status= 'PENDING'  then 1 else 0 end) as pending,
+                count(*) as total
+        from article 
+    """,nativeQuery = true)
+    Map<String,Long> countStatusByUser();
+
+        @Query("""
+            SELECT new freelance.new_syria_v2.article.dto.LatestNewsDto(a.id, a.header, COUNT(c))
+            FROM Article a
+            LEFT JOIN a.comments c
+            GROUP BY a.id, a.header
+            ORDER BY a.createdAt DESC
+        """)
+    Page<LatestNewsDto> getArticleWithCommentCountLatestNews(Pageable pageable);
 
 
 }

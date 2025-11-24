@@ -2,6 +2,7 @@ package freelance.new_syria_v2.article.controller;
 
 import java.util.UUID;
 
+import freelance.new_syria_v2.article.dto.LatestNewsDto;
 import freelance.new_syria_v2.auth.annotaions.IsPublic;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -106,4 +107,10 @@ public class ArticleController {
 		return this.articleMangment.findArticles(filter, page, size);
 	}
 
+    @GetMapping("/latest_news")
+    public Page<LatestNewsDto> getLatestNews(@RequestParam(defaultValue = "0") int page,
+     @RequestParam(defaultValue = "5") int size) {
+
+       return this.articleMangment.getLatestNews(page, size);
+    }
 }
