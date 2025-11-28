@@ -6,7 +6,7 @@ import java.time.Year;
 
 public class RegistrationEmail {
 
-    public static String buildEmail(String name, String link) {
+    public static String buildEmail(String email,String name, String link) {
 
         try {
             // Load HTML file from resources
@@ -18,7 +18,8 @@ public class RegistrationEmail {
             return template
                     .replace("{{name}}", name)
                     .replace("{{link}}", link)
-                    .replace("{{year}}", String.valueOf(Year.now().getValue()));
+                    .replace("{{year}}", String.valueOf(Year.now().getValue()))
+                    .replace("{{email}}",email);
 
         } catch (IOException e) {
             throw new RuntimeException("Failed to load email template", e);

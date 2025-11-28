@@ -1,5 +1,6 @@
 package freelance.new_syria_v2.auth.service;
 
+import freelance.new_syria_v2.auth.email.EmailService;
 import freelance.new_syria_v2.auth.jwt.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import freelance.new_syria_v2.auth.dto.RegistrationDto;
-import freelance.new_syria_v2.auth.email.BrevoEmailService;
 import freelance.new_syria_v2.auth.email.RegistrationEmail;
 import freelance.new_syria_v2.auth.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class RegistrationService {
 
     private final CustomUserDetailsService userService;
     private final PasswordEncoder encoder;
-    private final BrevoEmailService emailService;
+    private final EmailService emailService;
     private final JwtUtils  jwtUtils;
 
     @Value("${spring.app.servername}")
@@ -48,8 +48,11 @@ public class RegistrationService {
         var token=this.jwtUtils.generateToken(userUnEnabled);
 
        String url = serverLink + "/auth/confirm?token=" + token.token();
-//     //send email to vefy user
-	  emailService.sendEmail(registerDto.getEmail(),registerDto.getUserName(),"verfecation email",RegistrationEmail.buildEmail(registerDto.getUserName(),url) );
+
+       //send email to vefy user
+	  emailService.send(registerDto.getEmail(),
+              RegistrationEmail.buildEmail(registerDto.getEmail(),registerDto.getUserName(),url)
+              ,"Confirm your registration");
 
       LOGGER.info("New user registered with email: {}", savedUser.getEmail());
 
