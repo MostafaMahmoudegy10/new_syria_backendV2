@@ -1,0 +1,1 @@
+alter table otp add column created_at timestamp;

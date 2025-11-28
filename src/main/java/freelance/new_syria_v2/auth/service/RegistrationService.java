@@ -1,5 +1,6 @@
 package freelance.new_syria_v2.auth.service;
 
+import freelance.new_syria_v2.auth.email.EmailBuilder;
 import freelance.new_syria_v2.auth.jwt.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import freelance.new_syria_v2.auth.dto.RegistrationDto;
 import freelance.new_syria_v2.auth.email.BrevoEmailService;
-import freelance.new_syria_v2.auth.email.RegistrationEmail;
 import freelance.new_syria_v2.auth.entity.User;
 import lombok.RequiredArgsConstructor;
 
@@ -50,7 +50,7 @@ public class RegistrationService {
        String url = serverLink + "/auth/confirm?token=" + token.token();
 //     //send email to vefy user
 	  emailService.sendEmail(registerDto.getEmail(),registerDto.getUserName(),"verfecation email"
-              ,RegistrationEmail.buildEmail(registerDto.getEmail(),registerDto.getUserName(),url) );
+              , EmailBuilder.registerationEmail(registerDto.getEmail(),registerDto.getUserName(),url) );
 
       LOGGER.info("New user registered with email: {}", savedUser.getEmail());
 
