@@ -5,8 +5,11 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
+import freelance.new_syria_v2.article.controller.ArticleController;
 import freelance.new_syria_v2.article.dto.LatestNewsDto;
+import freelance.new_syria_v2.article.repository.ArticleCustomRepository;
 import freelance.new_syria_v2.auth.entity.ArticleUserDto;
+import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -41,6 +44,8 @@ public class ArticleMangment {
 
 	private final CustomUserDetailsService userService;
 
+    private final ArticleCustomRepository customRepository;
+
 	@Transactional
 	public commentDto createComment(UUID articleId, UUID userId, String commentContent) {
 		// Fetch the Article
@@ -74,27 +79,12 @@ public class ArticleMangment {
 		return repository.findByArticleId(articleId, pageable);
 	}
 
-	@Transactional()
-	public Page<Article> findArticles(ArticleFilter filter, int page, int size) {
-		Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+    @Transactional
+    public Page<ArticleController.ArticleFilterDto> findArticles(ArticleFilter filter, int page, int size) {
+       Pageable pageable = PageRequest.of(page, size);
 
-		Specification<Article> spec = Specification.where(null);
-
-		if (filter.categoryName() != null && !filter.categoryName().isEmpty()) {
-			spec = spec.and((root, query, cb) -> cb.equal(root.get("category").get("name"), filter.categoryName()));
-		}
-
-		if (filter.status() != null) {
-			spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), filter.status()));
-		}
-
-		if (filter.startDate() != null && filter.endDate() != null) {
-			spec = spec
-					.and((root, query, cb) -> cb.between(root.get("createdAt"), filter.startDate(), filter.endDate()));
-		}
-
-		return articleRepository.findAll(spec, pageable);
-	}
+       return this.customRepository.findAllFiltered(filter, pageable);
+    }
 
     public Page<ArticleUserDto> findUserArticles(UUID userId, int page, int size) {
 

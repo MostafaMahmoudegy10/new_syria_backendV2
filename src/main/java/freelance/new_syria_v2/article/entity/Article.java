@@ -8,6 +8,7 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import freelance.new_syria_v2.auth.entity.User;
 import freelance.new_syria_v2.categories.entitiy.Category;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -49,7 +50,7 @@ public class Article {
 	@OneToMany(mappedBy = "article")
 	List<Section> sections;
 
-	private String ImageUrl;
+	private String imageUrl;
 
 	@OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Comment> comments;
@@ -61,5 +62,9 @@ public class Article {
 	@JoinColumn(name="category_id",nullable = false)
 	Category category;
 
-    private UUID userId;
+
+    @JsonIgnore()
+    @ManyToOne()
+    @JoinColumn(name = "user_id")
+    private User user;
 }

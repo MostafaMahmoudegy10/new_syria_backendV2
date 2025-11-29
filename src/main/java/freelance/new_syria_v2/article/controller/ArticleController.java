@@ -1,5 +1,6 @@
 package freelance.new_syria_v2.article.controller;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 import freelance.new_syria_v2.article.dto.LatestNewsDto;
@@ -37,8 +38,9 @@ import lombok.AllArgsConstructor;
 @CrossOrigin("*")
 public class ArticleController {
 	public record ArticleCreated(UUID id, String imageUrl, String categoryName, String bio, String header,
-			Status status) {
-	}
+			Status status) { }
+    public record ArticleFilterDto(UUID id, String header
+            , String imageUrl, String userImageUrl, LocalDate createdAt,String bio,String categoryName){}
 
 	private final ArticleService service;
 	private final ArticleMangment articleMangment;
@@ -46,9 +48,9 @@ public class ArticleController {
 	// make an article for user or admin
 	@PostMapping
 	@PreAuthorize("hasAnyRole('ADMIN','USER')")
-	public ResponseEntity<ArticleCreated> save(@ModelAttribute("dto") ArticleDto dto) {
+	public String save(@ModelAttribute("dto") ArticleDto dto) {
 		ArticleCreated res = this.service.save(dto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(res);
+		return "article maked successfully";
 	}
 
 	// admin can review the post and make it approved or rejected
@@ -101,7 +103,7 @@ public class ArticleController {
 
 	@PostMapping("/filter")
     @IsPublic()
-	public Page<Article> filterArticles(@ModelAttribute ArticleFilter filter,
+	public Page<ArticleFilterDto> filterArticles(@ModelAttribute ArticleFilter filter,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
 		return this.articleMangment.findArticles(filter, page, size);

@@ -1,5 +1,6 @@
 package freelance.new_syria_v2.article.dto;
 
+import freelance.new_syria_v2.categories.entitiy.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
