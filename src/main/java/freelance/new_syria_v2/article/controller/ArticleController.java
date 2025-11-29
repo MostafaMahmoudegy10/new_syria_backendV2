@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import freelance.new_syria_v2.article.dto.LatestNewsDto;
+import freelance.new_syria_v2.auth.annotaions.CurrentUser;
 import freelance.new_syria_v2.auth.annotaions.IsPublic;
+import freelance.new_syria_v2.auth.entity.CurrentUserDto;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,8 +50,8 @@ public class ArticleController {
 	// make an article for user or admin
 	@PostMapping
 	@PreAuthorize("hasAnyRole('ADMIN','USER')")
-	public String save(@ModelAttribute("dto") ArticleDto dto) {
-		ArticleCreated res = this.service.save(dto);
+	public String save(@ModelAttribute("dto") ArticleDto dto, @CurrentUser CurrentUserDto user) {
+		ArticleCreated res = this.service.save(dto,user);
 		return "article maked successfully";
 	}
 

@@ -36,7 +36,8 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
         return new CurrentUserDto(
                 cud.getUser().getId(),
                 cud.getUser().getUserName(),
-                cud.getUser().getEmail()
+                cud.getUser().getEmail(),
+                cud.getUser().getRole().name()
         );
     }
 }

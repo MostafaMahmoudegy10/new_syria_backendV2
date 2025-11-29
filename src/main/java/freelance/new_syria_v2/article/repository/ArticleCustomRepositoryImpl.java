@@ -57,9 +57,7 @@ public class ArticleCustomRepositoryImpl implements ArticleCustomRepository {
             predicates.add(cb.equal(category.get("name"), filter.categoryName()));
         }
 
-        if (filter.status() != null) {
-            predicates.add(cb.equal(root.get("status"), filter.status()));
-        }
+        predicates.add(cb.equal(root.get("status"), "APPROVED"));
 
         if (filter.startDate() != null && filter.endDate() != null) {
             predicates.add(cb.between(root.get("createdAt"), filter.startDate(), filter.endDate()));

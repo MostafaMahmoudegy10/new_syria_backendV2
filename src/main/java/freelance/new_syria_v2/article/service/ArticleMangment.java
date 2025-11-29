@@ -82,7 +82,7 @@ public class ArticleMangment {
     @Transactional
     public Page<ArticleController.ArticleFilterDto> findArticles(ArticleFilter filter, int page, int size) {
        Pageable pageable = PageRequest.of(page, size);
-
+        System.out.println(filter.categoryName);
        return this.customRepository.findAllFiltered(filter, pageable);
     }
 

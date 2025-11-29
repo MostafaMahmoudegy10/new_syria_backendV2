@@ -42,8 +42,10 @@ public interface ArticleRepository extends JpaRepository<Article, UUID>
                     a.id, a.header, COUNT(c),a.category.name,a.createdAt)
             FROM Article a
             LEFT JOIN a.comments c
+            where a.status='APPROVED'
             GROUP BY a.id, a.header,a.category.name
             ORDER BY a.createdAt DESC
+            
         """)
     Page<LatestNewsDto> getArticleWithCommentCountLatestNews(Pageable pageable);
 
