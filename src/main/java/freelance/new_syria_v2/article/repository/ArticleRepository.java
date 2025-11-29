@@ -38,10 +38,10 @@ public interface ArticleRepository extends JpaRepository<Article, UUID>
     Map<String,Long> countStatusByUser();
 
         @Query("""
-            SELECT new freelance.new_syria_v2.article.dto.LatestNewsDto(a.id, a.header, COUNT(c))
+            SELECT new freelance.new_syria_v2.article.dto.LatestNewsDto(a.id, a.header, COUNT(c),a.category.name)
             FROM Article a
             LEFT JOIN a.comments c
-            GROUP BY a.id, a.header
+            GROUP BY a.id, a.header,a.category.name
             ORDER BY a.createdAt DESC
         """)
     Page<LatestNewsDto> getArticleWithCommentCountLatestNews(Pageable pageable);

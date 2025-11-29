@@ -16,4 +16,5 @@ public class LatestNewsDto {
     private UUID id;
     private String header;
     private Long commentCount;
+    private String categoryName;
 }
