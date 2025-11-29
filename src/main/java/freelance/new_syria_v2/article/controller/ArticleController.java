@@ -40,7 +40,7 @@ public class ArticleController {
 	public record ArticleCreated(UUID id, String imageUrl, String categoryName, String bio, String header,
 			Status status) { }
     public record ArticleFilterDto(UUID id, String header
-            , String imageUrl, String userImageUrl, LocalDate createdAt,String bio,String categoryName){}
+            , String imageUrl, String userImageUrl, LocalDate createdAt,String bio,String categoryName,String userName){}
 
 	private final ArticleService service;
 	private final ArticleMangment articleMangment;

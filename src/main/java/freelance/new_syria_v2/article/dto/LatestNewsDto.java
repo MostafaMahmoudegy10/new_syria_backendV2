@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -17,4 +18,5 @@ public class LatestNewsDto {
     private String header;
     private Long commentCount;
     private String categoryName;
+    private LocalDate createdAt;
 }

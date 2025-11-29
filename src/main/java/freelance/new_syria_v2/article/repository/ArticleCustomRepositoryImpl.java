@@ -46,7 +46,8 @@ public class ArticleCustomRepositoryImpl implements ArticleCustomRepository {
                 user.get("imageUrl"),
                 root.get("createdAt"),
                 root.get("bio"),
-                category.get("name")
+                category.get("name"),
+                user.get("userName")
         ));
 
         // ========= WHERE =========
