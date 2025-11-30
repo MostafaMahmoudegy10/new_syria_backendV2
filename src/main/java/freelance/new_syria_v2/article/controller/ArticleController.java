@@ -1,9 +1,12 @@
 package freelance.new_syria_v2.article.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
+import freelance.new_syria_v2.article.dto.ArticleFilterStatus;
 import freelance.new_syria_v2.article.dto.LatestNewsDto;
+import freelance.new_syria_v2.article.schdeular.entity.MonthlyReport;
 import freelance.new_syria_v2.auth.annotaions.CurrentUser;
 import freelance.new_syria_v2.auth.annotaions.IsPublic;
 import freelance.new_syria_v2.auth.entity.CurrentUserDto;
@@ -44,7 +47,7 @@ public class ArticleController {
     public record ArticleFilterDto(UUID id, String header
             , String imageUrl, String userImageUrl, LocalDate createdAt,String bio,String categoryName,String userName){}
 
-	private final ArticleService service;
+    private final ArticleService service;
 	private final ArticleMangment articleMangment;
 
 	// make an article for user or admin
@@ -65,14 +68,14 @@ public class ArticleController {
 
 	// for the admin to show what he approved and what no
 	@GetMapping("/status")
-	@IsPublic()
-	public ResponseEntity<Page<Article>> findAllByStatus(
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<ArticleFilterStatus>> findAllByStatus(
 			@RequestParam(name = "size", required = false, defaultValue = "10") int size,
 			@RequestParam(name = "page", required = false, defaultValue = "0") int page,
 			@RequestParam(name = "status", required = false) String status,
 			@RequestParam(name = "sort", defaultValue = "desc", required = false) String sort) {
 		Status statusOfArticle = Status.from(status);
-		Page<Article> articles = this.service.findByStatus(statusOfArticle, page, size, sort);
+		Page<ArticleFilterStatus> articles = this.service.findByStatus(statusOfArticle, page, size, sort);
 		return ResponseEntity.ok(articles);
 	}
 
@@ -116,5 +119,12 @@ public class ArticleController {
      @RequestParam(defaultValue = "5") int size) {
 
        return this.articleMangment.getLatestNews(page, size);
+    }
+
+    @GetMapping("/stats/monthly")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?>statsMonthly(){
+       List<MonthlyReport> list= this.articleMangment.statsMonthly();
+        return ResponseEntity.ok(list);
     }
 }

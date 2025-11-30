@@ -3,6 +3,8 @@ package freelance.new_syria_v2.article.service;
 import java.util.List;
 import java.util.UUID;
 
+import freelance.new_syria_v2.article.controller.ArticleController;
+import freelance.new_syria_v2.article.dto.ArticleFilterStatus;
 import freelance.new_syria_v2.auth.entity.CurrentUserDto;
 import freelance.new_syria_v2.auth.entity.User;
 import org.springframework.data.domain.Page;
@@ -87,18 +89,14 @@ public class ArticleService {
     }
 
     @Transactional
-    public Page<Article> findByStatus(Status status, int page, int size, String sort) {
+    public Page<ArticleFilterStatus> findByStatus(Status status, int page, int size, String sort) {
         Pageable pageable;
         if ("desc".equalsIgnoreCase(sort)) {
             pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         } else {
             pageable = PageRequest.of(page, size, Sort.by("createdAt").ascending());
         }
-        if (status != null) {
-            return this.articleRepository.findByStatus(status, pageable);
-        }
 
-        return this.articleRepository.findAll(pageable);
-
+        return this.articleRepository.findByStatus(status, pageable);
     }
 }

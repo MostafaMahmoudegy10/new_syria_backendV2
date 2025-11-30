@@ -2,12 +2,15 @@ package freelance.new_syria_v2.article.service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import freelance.new_syria_v2.article.controller.ArticleController;
 import freelance.new_syria_v2.article.dto.LatestNewsDto;
 import freelance.new_syria_v2.article.repository.ArticleCustomRepository;
+import freelance.new_syria_v2.article.schdeular.entity.MonthlyReport;
+import freelance.new_syria_v2.article.schdeular.repository.MonthlyReportRepository;
 import freelance.new_syria_v2.auth.entity.ArticleUserDto;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.domain.Page;
@@ -30,6 +33,7 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class ArticleMangment {
+
 	public record commentDto(String commentContent, Status commentStatus) {
 	}
 
@@ -45,6 +49,8 @@ public class ArticleMangment {
 	private final CustomUserDetailsService userService;
 
     private final ArticleCustomRepository customRepository;
+
+    private final MonthlyReportRepository monthlyReportRepository;
 
 	@Transactional
 	public commentDto createComment(UUID articleId, UUID userId, String commentContent) {
@@ -106,6 +112,7 @@ public class ArticleMangment {
     }
 
     public Map<String, Long> getUserArticleStatus() {
+
         return articleRepository.countStatusByUser();
     }
     public Page<LatestNewsDto> getLatestNews(int page, int size) {
@@ -113,5 +120,9 @@ public class ArticleMangment {
         Pageable pageable = PageRequest.of(page,size);
 
         return  this.articleRepository.getArticleWithCommentCountLatestNews(pageable);
+    }
+
+    public List<MonthlyReport> statsMonthly(){
+        return this.monthlyReportRepository.findAllByOrderByYearAscMonthAsc();
     }
 }
