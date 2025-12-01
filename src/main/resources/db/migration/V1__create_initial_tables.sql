@@ -14,7 +14,7 @@ CREATE TABLE image (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     file_name VARCHAR(255),
     file_type VARCHAR(50),
-    image_data BYTEA
+    image_data bigint
 );
 
 -- ==========================
@@ -23,7 +23,7 @@ CREATE TABLE image (
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 
-    user_name VARCHAR(50) NOT NULL UNIQUE,
+    user_name VARCHAR(50) NOT NULL ,
 
     password VARCHAR(255) NOT NULL,
 

@@ -79,6 +79,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		// find user in db
 		User user = this.findUser(id);
 		boolean flag = false;
+
 		if (dto.getPhoneNumber() != null) {
 			user.setPhoneNumber(dto.getPhoneNumber());
 			flag = true;
