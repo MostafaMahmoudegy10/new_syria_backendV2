@@ -136,9 +136,10 @@
 				<artifactId>flyway-maven-plugin</artifactId>
 				<configuration>
 					<url>
-						jdbc:postgresql://switchyard.proxy.rlwy.net:56706/railway</url>
+                        jdbc:postgresql://caboose.proxy.rlwy.net:44281/railway
+                    </url>
 					<user>postgres</user>
-					<password>OIgiqYTuNjVDUoRbQQOonjChcRuKTsdn</password>
+					<password>wLPHLoiZxvWRHPqZkndnjTKdrZOkLnfL</password>
 					<schemas>
 						<schema>public</schema>
 					</schemas>
