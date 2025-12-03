@@ -4,12 +4,14 @@ import java.util.Map;
 import java.util.UUID;
 
 import freelance.new_syria_v2.article.dto.ArticleFilterStatus;
+import freelance.new_syria_v2.article.dto.FiredTopicProjection;
 import freelance.new_syria_v2.article.dto.LatestNewsDto;
 import freelance.new_syria_v2.article.schdeular.repository.MonthlyStatsProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import freelance.new_syria_v2.article.entity.Article;
@@ -71,4 +73,31 @@ public interface ArticleRepository extends JpaRepository<Article, UUID>
     )
     MonthlyStatsProjection getStatsForMonth(@Param("year") int year, @Param("month") int month);
 
+    @Modifying
+    @Query("UPDATE Article a SET a.reacts = a.reacts + 1 WHERE a.id = :id")
+    int incrementLikes(@Param("id")UUID id);
+
+    @Modifying
+    @Query("UPDATE Article a SET a.views = a.views + 1 WHERE a.id = :id")
+    int incrementViews(@Param("id")UUID id);
+
+    @Query(
+            value = """
+            SELECT 
+                a.id,
+                a.header,
+                (
+                    COALESCE((SELECT COUNT(*) FROM comment c WHERE c.article_id = a.id), 0) +
+                    COALESCE(a.reacts, 0) +
+                    COALESCE(a.views, 0)
+                ) AS total_views
+            FROM article a
+            ORDER BY total_views DESC
+            """,
+            countQuery = """
+            SELECT COUNT(*) FROM article
+            """,
+            nativeQuery = true
+    )
+    Page<FiredTopicProjection> findFiredTopics(Pageable pageable);
 }

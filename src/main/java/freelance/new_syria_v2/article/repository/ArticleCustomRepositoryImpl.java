@@ -102,4 +102,6 @@ public class ArticleCustomRepositoryImpl implements ArticleCustomRepository {
 
         return new PageImpl<>(resultList, pageable, total);
     }
+
+
 }

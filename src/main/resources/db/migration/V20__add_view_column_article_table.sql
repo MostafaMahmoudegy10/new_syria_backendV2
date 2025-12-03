@@ -1,0 +1,1 @@
+alter table article add column views bigint default 0;

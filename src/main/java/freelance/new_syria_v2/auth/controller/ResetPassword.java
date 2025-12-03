@@ -6,6 +6,10 @@ import freelance.new_syria_v2.auth.entity.CurrentUserDto;
 import freelance.new_syria_v2.auth.entity.User;
 import freelance.new_syria_v2.auth.service.ResetPasswordService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth/reset-password")
 public class ResetPassword {
@@ -26,8 +30,9 @@ public class ResetPassword {
 
     @IsPublic
     @PostMapping("/verify")
-    public String verify(@ModelAttribute RequestResetPasswordDto dto) {
-        return service.verifyOtp(dto);
+    public Map<String,String> verify(@ModelAttribute RequestResetPasswordDto dto) {
+        String token=service.verifyOtp(dto);
+        return Collections.singletonMap("Token : ",token);
     }
 
     @PostMapping

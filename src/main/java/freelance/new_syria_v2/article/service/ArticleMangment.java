@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import freelance.new_syria_v2.article.controller.ArticleController;
+import freelance.new_syria_v2.article.dto.FiredTopicProjection;
 import freelance.new_syria_v2.article.dto.LatestNewsDto;
 import freelance.new_syria_v2.article.repository.ArticleCustomRepository;
 import freelance.new_syria_v2.article.schdeular.entity.MonthlyReport;
@@ -124,5 +125,21 @@ public class ArticleMangment {
 
     public List<MonthlyReport> statsMonthly(){
         return this.monthlyReportRepository.findAllByOrderByYearAscMonthAsc();
+    }
+
+    @Transactional
+    public long incrementLike(UUID id) {
+        int updated = articleRepository.incrementLikes(id);
+
+        if (updated == 0) {
+            throw new RuntimeException("Article not found");
+        }
+
+        return articleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Article not found"))
+                .getReacts();
+    }
+    public Page<FiredTopicProjection> getRankedArticles(int page, int size) {
+        return articleRepository.findFiredTopics(PageRequest.of(page, size));
     }
 }

@@ -2,9 +2,11 @@ package freelance.new_syria_v2.article.controller;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import freelance.new_syria_v2.article.dto.ArticleFilterStatus;
+import freelance.new_syria_v2.article.dto.FiredTopicProjection;
 import freelance.new_syria_v2.article.dto.LatestNewsDto;
 import freelance.new_syria_v2.article.schdeular.entity.MonthlyReport;
 import freelance.new_syria_v2.auth.annotaions.CurrentUser;
@@ -15,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,13 +35,11 @@ import freelance.new_syria_v2.article.service.ArticleMangment.ArticleFilter;
 import freelance.new_syria_v2.article.service.ArticleMangment.commentDto;
 import freelance.new_syria_v2.article.service.ArticleService;
 import freelance.new_syria_v2.auth.service.CustomUserDetails;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import lombok.AllArgsConstructor;
 
 @RestController()
 @RequestMapping("/articles")
 @AllArgsConstructor
-@CrossOrigin("*")
 public class ArticleController {
 	public record ArticleCreated(UUID id, String imageUrl, String categoryName, String bio, String header,
 			Status status) { }
@@ -126,5 +125,19 @@ public class ArticleController {
     public ResponseEntity<?>statsMonthly(){
        List<MonthlyReport> list= this.articleMangment.statsMonthly();
         return ResponseEntity.ok(list);
+    }
+
+   @PostMapping("/{id}/likes")
+   public ResponseEntity<Map<String,Long>> likedArticle(@PathVariable("id") UUID id){
+       Map<String,Long> map= Map.of("likes",this.articleMangment.incrementLike(id));
+        return ResponseEntity.ok(map);
+    }
+
+    @GetMapping("/ranked")
+    @IsPublic()
+    public Page<FiredTopicProjection> getRankedArticles(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return this.articleMangment.getRankedArticles(page, size);
     }
 }

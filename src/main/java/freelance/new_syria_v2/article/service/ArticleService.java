@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,9 +38,14 @@ public class ArticleService {
     private final ImageUtil imageUtil;
     private final CategoryRepository categoryRepository;
     private final CustomUserDetailsService customUserDetailsService;
+    private final ArticleAsyncService articleAsyncService;
 
+
+    @Transactional
     public Article findById(UUID id) {
-        System.out.println("the id is :" + id);
+
+        this.articleAsyncService.incrementViewsAsync(id);
+
         Article article = this.articleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("the article with id " + id + " is not found"));
         return article;

@@ -1,0 +1,1 @@
+alter table article add column reacts bigint default 0;
