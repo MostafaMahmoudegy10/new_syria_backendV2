@@ -140,6 +140,7 @@ public class ArticleMangment {
                 .getReacts();
     }
     public Page<FiredTopicProjection> getRankedArticles(int page, int size) {
-        return articleRepository.findFiredTopics(PageRequest.of(page, size));
+        Page<FiredTopicProjection> res = articleRepository.findFiredTopics(PageRequest.of(page, size));
+        return res;
     }
 }
