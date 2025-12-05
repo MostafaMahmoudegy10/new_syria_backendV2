@@ -59,7 +59,7 @@ public class SecurityConfig {
 
 		configuration.setAllowedOrigins(List.of("https://syria-news.vercel.app",
 				"https://newssyriabackend-newsyria.up.railway.app", "http://localhost:3000", "http://localhost:8080",
-				"http://localhost:5173", "http://192.168.1.2:5173"));
+				"http://localhost:5173", "http://192.168.1.2:5173","https://newsyria.news"));
 
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(List.of("*"));
