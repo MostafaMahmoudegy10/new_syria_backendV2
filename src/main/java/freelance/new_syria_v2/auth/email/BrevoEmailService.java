@@ -26,8 +26,8 @@ public class BrevoEmailService {
 
         // Sender
         Map<String, String> sender = new HashMap<>();
-        sender.put("email", "mostafa.mahmoudegy10@gmail.com");
-        sender.put("name", "New Syria App");
+        sender.put("email", "info@newsyria.news");
+        sender.put("name", "hamada kirata");
 
         // Recipient
         Map<String, String> to = new HashMap<>();
