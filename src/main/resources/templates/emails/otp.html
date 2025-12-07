@@ -4,6 +4,45 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>New Syria - تغيير كلمة المرور</title>
+    <style>
+        body, table, td, a {
+            -webkit-text-size-adjust:100%;
+            -ms-text-size-adjust:100%;
+        }
+        table {
+            border-collapse:collapse !important;
+        }
+        /* الصور والنصوص قابلة للتكيف */
+        img {
+            border:0;
+            height:auto;
+            line-height:100%;
+            outline:none;
+            text-decoration:none;
+            max-width:100%;
+        }
+        /* Responsive */
+        @media screen and (max-width: 680px) {
+            .card {
+                width: 95% !important;
+                padding: 20px !important;
+            }
+            h1 {
+                font-size: 24px !important;
+            }
+            p {
+                font-size: 15px !important;
+            }
+            .otp-table td {
+                width: 50px !important;
+                height: 50px !important;
+                font-size: 18px !important;
+            }
+            .otp-spacer {
+                width: 12px !important;
+            }
+        }
+    </style>
 </head>
 
 <body style="margin:0; padding:0; background:#f9fafb; font-family:Arial, Helvetica, sans-serif; direction:rtl; text-align:center;">
@@ -13,7 +52,7 @@
         <td align="center">
 
             <!-- CARD -->
-            <table cellpadding="0" cellspacing="0" width="95%" style="max-width:680px; background:#ffffff; border-radius:16px; box-shadow:0 6px 20px rgba(0,0,0,0.12); overflow:hidden;">
+            <table class="card" cellpadding="0" cellspacing="0" width="95%" style="max-width:680px; background:#ffffff; border-radius:16px; box-shadow:0 6px 20px rgba(0,0,0,0.12); overflow:hidden;">
 
                 <!-- HEADER -->
                 <tr>
@@ -25,17 +64,17 @@
 
                 <!-- BODY -->
                 <tr>
-                    <td style="padding:50px 40px;">
+                    <td style="padding:50px 40px; text-align:center;">
 
                         <!-- OTP -->
-                        <table cellpadding="0" cellspacing="0" style="margin:0 auto; text-align:center;">
+                        <table class="otp-table" cellpadding="0" cellspacing="0" style="margin:0 auto; text-align:center;">
                             <tr>
                                 <td style="width:60px; height:60px; border:2px solid #008c5a; border-radius:16px; font-size:22px; font-weight:700; color:#374151;">{{otp4}}</td>
-                                <td style="width:18px;"></td>
+                                <td class="otp-spacer" style="width:18px;"></td>
                                 <td style="width:60px; height:60px; border:2px solid #008c5a; border-radius:16px; font-size:22px; font-weight:700; color:#374151;">{{otp3}}</td>
-                                <td style="width:18px;"></td>
+                                <td class="otp-spacer" style="width:18px;"></td>
                                 <td style="width:60px; height:60px; border:2px solid #008c5a; border-radius:16px; font-size:22px; font-weight:700; color:#374151;">{{otp2}}</td>
-                                <td style="width:18px;"></td>
+                                <td class="otp-spacer" style="width:18px;"></td>
                                 <td style="width:60px; height:60px; border:2px solid #008c5a; border-radius:16px; font-size:22px; font-weight:700; color:#374151;">{{otp1}}</td>
                             </tr>
                         </table>
