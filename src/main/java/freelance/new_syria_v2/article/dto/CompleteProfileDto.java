@@ -1,5 +1,6 @@
 package freelance.new_syria_v2.article.dto;
 
+import jakarta.annotation.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
@@ -14,7 +15,8 @@ public class CompleteProfileDto {
 	private String phoneNumber;
 
 	private String bio;
-	
+
+	@Nullable
 	private MultipartFile file;
 
 }

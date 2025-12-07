@@ -62,16 +62,17 @@ public class User {
 
 	private boolean isCompletedProfile = false;
 
-	@Column(name = "imageUrl")
+	@Column(name = "imageUrl", nullable = true)
 	private String imageUrl;
 
+    @Column(nullable = true)
 	private String countryName;
 
 	@Column(name = "phone_number", nullable = true, length = 15)
 	@Pattern(regexp = "^(\\+\\d{1,3}[- ]?)?\\d{9,15}$", message = "Invalid phone number")
 	private String phoneNumber;
 
-	@Column(name = "bio")
+	@Column(name = "bio",nullable = true)
 	private String bio;
 
 }
