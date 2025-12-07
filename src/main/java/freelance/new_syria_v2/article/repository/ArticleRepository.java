@@ -120,4 +120,10 @@ public interface ArticleRepository extends JpaRepository<Article, UUID>
                 and a.user.id=:userId
     """)
     void deleteByArticleId_AndUserId(UUID articleId,UUID userId);
+
+    @Query("""
+        select count(a.id) from Article a
+               where a.user.id=:userId
+       """)
+    String  countAllArticlesByUserId(UUID userId);
 }

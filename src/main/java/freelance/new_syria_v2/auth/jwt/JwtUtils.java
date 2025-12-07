@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import freelance.new_syria_v2.article.repository.ArticleRepository;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,11 +29,17 @@ public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
+    private final ArticleRepository articleRepository;
+
     @Value("${spring.app.jwtSecret}")
     private String jwtSecret;
 
     @Value("${spring.app.jwtExpirationMs}")
     private long jwtExpirationMs;
+
+    public JwtUtils(ArticleRepository articleRepository) {
+        this.articleRepository = articleRepository;
+    }
 
     public String getJwtFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
@@ -59,6 +67,7 @@ public class JwtUtils {
                 .claim("email", userDetails.getUser().getEmail())
                 .claim("userId", userDetails.getUser().getId())
                 .claim("userImage",userDetails.getUser().getImageUrl())
+                .claim("numOfArticles",articleRepository.countAllArticlesByUserId(userDetails.getUser().getId()))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256) 
                 .compact();
        
