@@ -58,7 +58,7 @@ public class AuthController {
 		registrationService.confirmEmail(token);
         return ResponseEntity
                 .status(302)
-                .header("Location", "https://syria-news.vercel.app/login")
+                .header("Location", "https://newsyria.news/login")
                 .build();
 	}
 
