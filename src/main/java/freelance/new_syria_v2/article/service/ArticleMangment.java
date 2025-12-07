@@ -10,9 +10,11 @@ import freelance.new_syria_v2.article.controller.ArticleController;
 import freelance.new_syria_v2.article.dto.FiredTopicProjection;
 import freelance.new_syria_v2.article.dto.LatestNewsDto;
 import freelance.new_syria_v2.article.repository.ArticleCustomRepository;
+import freelance.new_syria_v2.article.repository.ImageRepository;
 import freelance.new_syria_v2.article.schdeular.entity.MonthlyReport;
 import freelance.new_syria_v2.article.schdeular.repository.MonthlyReportRepository;
 import freelance.new_syria_v2.auth.entity.ArticleUserDto;
+import freelance.new_syria_v2.auth.entity.CurrentUserDto;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,7 +37,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ArticleMangment {
 
-	public record commentDto(String commentContent, Status commentStatus) {
+    public record commentDto(String commentContent, Status commentStatus) {
 	}
 
 	public record ArticleFilter(String categoryName, Status status, LocalDate startDate, LocalDate endDate) {
@@ -52,6 +54,8 @@ public class ArticleMangment {
     private final ArticleCustomRepository customRepository;
 
     private final MonthlyReportRepository monthlyReportRepository;
+
+    private final ArticleAsyncService articleAsyncService;
 
 	@Transactional
 	public commentDto createComment(UUID articleId, UUID userId, String commentContent) {
@@ -143,4 +147,23 @@ public class ArticleMangment {
         Page<FiredTopicProjection> res = articleRepository.findFiredTopics(PageRequest.of(page, size));
         return res;
     }
+
+    @Transactional
+    public void deleteComment(long commentId) {
+        this.repository.deleteById(commentId);
+    }
+
+    @Transactional
+    public void deleteArticle(UUID articleId, UUID userId) {
+        String imageUrl= this.articleRepository.findImageUrl(articleId);
+        this.articleAsyncService.deleteImageAsync(imageUrl);
+        this.articleRepository.deleteByArticleId_AndUserId(articleId,userId);
+    }
+
+    @Transactional
+    public void decrementLike(UUID id) {
+        this.articleRepository.decrementLikes(id);
+    }
+
+
 }

@@ -77,6 +77,11 @@ public interface ArticleRepository extends JpaRepository<Article, UUID>
     @Query("UPDATE Article a SET a.reacts = a.reacts + 1 WHERE a.id = :id")
     int incrementLikes(@Param("id")UUID id);
 
+
+    @Modifying
+    @Query("UPDATE Article a SET a.reacts = a.reacts - 1 WHERE a.id = :id")
+    int decrementLikes(@Param("id")UUID id);
+
     @Modifying
     @Query("UPDATE Article a SET a.views = a.views + 1 WHERE a.id = :id")
     int incrementViews(@Param("id")UUID id);
@@ -100,4 +105,19 @@ public interface ArticleRepository extends JpaRepository<Article, UUID>
             nativeQuery = true
     )
     Page<FiredTopicProjection> findFiredTopics(Pageable pageable);
+
+    @Query("""
+        select a.imageUrl 
+               from Article a
+                      where a.id=:articleId
+       """)
+    String findImageUrl(@Param("articleId") UUID articleId);
+
+    @Modifying
+    @Query("""
+        delete from Article a
+            where a.id=:articleId
+                and a.user.id=:userId
+    """)
+    void deleteByArticleId_AndUserId(UUID articleId,UUID userId);
 }

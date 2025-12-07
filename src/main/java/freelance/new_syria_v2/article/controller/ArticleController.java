@@ -17,14 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import freelance.new_syria_v2.article.dto.ArticleDto;
 import freelance.new_syria_v2.article.entity.Article;
@@ -114,6 +107,7 @@ public class ArticleController {
 	}
 
     @GetMapping("/latest_news")
+    @IsPublic()
     public Page<LatestNewsDto> getLatestNews(@RequestParam(defaultValue = "0") int page,
      @RequestParam(defaultValue = "5") int size) {
 
@@ -128,9 +122,15 @@ public class ArticleController {
     }
 
    @PostMapping("/{id}/likes")
+   @PreAuthorize("hasAnyRole('ADMIN','USER')")
    public ResponseEntity<Map<String,Long>> likedArticle(@PathVariable("id") UUID id){
        Map<String,Long> map= Map.of("likes",this.articleMangment.incrementLike(id));
         return ResponseEntity.ok(map);
+    }
+    @PostMapping("/{id}/unlike")
+    public ResponseEntity<?> unlikedArticle(@PathVariable("id") UUID id){
+        this.articleMangment.decrementLike(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/ranked")
@@ -141,4 +141,17 @@ public class ArticleController {
 
         return this.articleMangment.getRankedArticles(page, size);
     }
+    @DeleteMapping("/comments/{commentId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteComment(@PathVariable("commentId") long commentId) {
+        this.articleMangment.deleteComment(commentId);
+        return ResponseEntity.ok().build();
+    }
+    @DeleteMapping("/{articleId}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<?> deleteArticle(@PathVariable("articleId") UUID articleId,@CurrentUser CurrentUserDto dto) {
+        this.articleMangment.deleteArticle(articleId,dto.id());
+        return ResponseEntity.ok().build();
+    }
+
 }

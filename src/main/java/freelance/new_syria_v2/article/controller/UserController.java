@@ -48,7 +48,8 @@ public class UserController {
 	@PostMapping("/complete-profile")
 	public ResponseEntity<String> completeProfile(@ModelAttribute()CompleteProfileDto dto,
                                                   @CurrentUser CurrentUserDto currentUser) {
-		 this.userService.completeProfile(currentUser.id(), dto);
+        System.out.println(dto.getFile().getOriginalFilename());
+        this.userService.completeProfile(currentUser.id(), dto);
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body("user profile has completed");
 	}
     @GetMapping("/articles")
