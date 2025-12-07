@@ -4,20 +4,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import freelance.new_syria_v2.article.entity.Article;
 import freelance.new_syria_v2.article.service.ArticleMangment;
 import freelance.new_syria_v2.auth.annotaions.CurrentUser;
 import freelance.new_syria_v2.auth.entity.ArticleUserDto;
 import freelance.new_syria_v2.auth.entity.CurrentUserDto;
-import freelance.new_syria_v2.auth.publicendpoints.CurrentUserArgumentResolver;
-import freelance.new_syria_v2.auth.service.CustomUserDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import freelance.new_syria_v2.article.dto.CompleteProfileDto;
 import freelance.new_syria_v2.auth.entity.User;
